@@ -1,121 +1,80 @@
 #include <iostream>
+
+#include <fstream>
+
+#include <string>
+
 using namespace std;
 
-void checkNumeric() {
-    string input;
-    cout << "Enter a string: ";
-    cin >> input;
+bool isIdentifier(const string&s) {
 
-    bool numeric = true;
-    for (char c : input) {
-        if (c < '0' || c > '9') {
-            numeric = false;
-            break;
+    if (s.empty())
+
+        return false;
+
+    string keywords[] = {"int", "float", "double", "char", "bool", "void", "if", "else", "for", "while"};
+
+    for (int i = 0; i <10; i++) {
+
+        if (s == keywords[i])
+
+            return false;
+
+    }
+
+    if (!((s[0] >= 'A' && s[0] <= 'Z') ||(s[0] >= 'a' && s[0] <= 'z') ||(s[0] == '_')))
+
+        {
+
+         return false;
+
         }
-    }
 
-    cout << (numeric ? "Numeric Constant" : "Not Numeric") << endl;
-}
+    for (int i = 1; i < s.length(); i++) {
 
-void checkOperator() {
-    string input;
-    cout << "Enter a character: ";
-    cin >> input;
+        if (!((s[i] >= 'A' && s[i] <= 'Z') ||(s[i] >= 'a' && s[i] <= 'z') ||(s[i] >= '0' && s[i] <= '9') ||(s[i] == '_')))
 
-    string ops = "+-*/%=";
-    if (input.length() == 1 && ops.find(input[0]) != string::npos)
-        cout << "Operator" << endl;
-    else
-        cout << "Not Operator" << endl;
-}
+        {
 
-void checkComment() {
-    string input;
-    cout << "Enter comment line: ";
-    cin.ignore();
-    getline(cin, input);
+            return false;}
 
-    if (input.substr(0, 2) == "//")
-        cout << "Single-line comment" << endl;
-    else if (input.substr(0, 2) == "/*" && input.substr(input.size() - 2) == "*/")
-        cout << "Multi-line comment" << endl;
-    else
-        cout << "Not a comment" << endl;
-}
+            }
 
-void checkIdentifier() {
-    string s;
-    cout << "Enter identifier: ";
-    cin >> s;
+       return true;
 
-    if (!((s[0] >= 'A' && s[0] <= 'Z') || (s[0] >= 'a' && s[0] <= 'z') || s[0] == '_')) {
-        cout << "Not Identifier" << endl;
-        return;
-    }
-
-    for (int i = 1; i < s.size(); i++) {
-        char c = s[i];
-        if (!((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '_')) {
-            cout << "Not Identifier" << endl;
-            return;
-        }
-    }
-    cout << "Identifier" << endl;
-}
-
-void findAverage() {
-    int arr[] = {15, 7, 99, 42, 3};
-    int n = 5;
-    int sum = 0;
-
-    for (int i = 0; i < n; i++) sum += arr[i];
-    cout << "Average: " << (float)sum / n << endl;
-}
-
-void findMinMax() {
-    int arr[] = {15, 7, 99, 42, 3};
-    int n = 5, min = arr[0], max = arr[0];
-
-    for (int i = 1; i < n; i++) {
-        if (arr[i] < min) min = arr[i];
-        if (arr[i] > max) max = arr[i];
-    }
-    cout << "Min = " << min << ", Max = " << max << endl;
-}
-
-void concatName() {
-    string first, last;
-    cout << "Enter first name: ";
-    cin >> first;
-    cout << "Enter last name: ";
-    cin >> last;
-    cout << "Full name: " << first + " " + last << endl;
 }
 
 int main() {
-    cout << "===== CD LAB 1 SIMPLE VERSION =====" << endl;
 
-    cout << "\n1. Numeric Check:" << endl;
-    checkNumeric();
+    ifstream file("sample.txt");
 
-    cout << "\n2. Operator Check:" << endl;
-    checkOperator();
+    if (!file) {
 
-    cout << "\n3. Comment Check:" << endl;
-    checkComment();
+        cout << "Could not open sample.txt" << endl;
 
-    cout << "\n4. Identifier Check:" << endl;
-    checkIdentifier();
+        return 1;
 
-    cout << "\n5. Average of Array:" << endl;
-    findAverage();
-
-    cout << "\n6. Min and Max of Array:" << endl;
-    findMinMax();
-
-    cout << "\n7. Concatenate Name:" << endl;
-    concatName();
-
-    cout << "===================================" << endl;
-    return 0;
 }
+
+    string word;
+
+    cout << "Checking identifiers"<<endl;
+
+    while (file >> word) {
+
+        if (isIdentifier(word))
+
+            cout << word <<" - " << "Identifier"<<endl;
+
+        else
+
+            cout << word <<"  - "<< "Not an Identifier"<<endl;
+
+    }
+
+  file.close();
+
+  return 0;
+
+}
+
